@@ -467,7 +467,7 @@ const floodSensorTriggered=(floor,sensor)=>(floor?.furniture||[]).some(source=>s
 const GASABLE_FURNITURE=new Set(['kitchencounter']);
 const GAS_DEFAULT_RADIUS=2.5,GAS_RADIUS_MIN=.5,GAS_RADIUS_MAX=6,GAS_SENSOR_RANGE=3;
 const gasRadius=f=>clamp(Number.isFinite(+f.gasRadius)?+f.gasRadius:GAS_DEFAULT_RADIUS,GAS_RADIUS_MIN,GAS_RADIUS_MAX);
-const gasSensorTriggered=(floor,sensor)=>(floor?.furniture||[]).some(source=>source.gasLeaking&&GASABLE_FURNITURE.has(source.type)&&dist(source,sensor)<=GAS_SENSOR_RANGE+gasRadius(source)*.35);
+const gasSensorTriggered=(floor,sensor)=>(floor?.furniture||[]).some(source=>source.gasLeaking&&GASABLE_FURNITURE.has(source.type)&&dist(source,sensor)<=GAS_SENSOR_RANGE+gasRadius(source));
 const gasButtonHTML=f=>GASABLE_FURNITURE.has(f.type)?`<button class="btn ${f.gasLeaking?'danger':'primary'}" data-act="gas-toggle">${f.gasLeaking?'หยุดแก๊สรั่ว':'จำลองแก๊สรั่ว'}</button><label class="field">ระยะแก๊สจำลอง <span><output id="o-gas-radius">${gasRadius(f).toFixed(1)} ม.</output></span><input type="range" id="p-gas-radius" min="${GAS_RADIUS_MIN}" max="${GAS_RADIUS_MAX}" step="0.1" value="${gasRadius(f)}"></label>`:'';
 const leakButtonHTML=f=>LEAKABLE_FURNITURE.has(f.type)?`<button class="btn ${f.leaking?'danger':'primary'}" data-act="leak-toggle">${f.leaking?'หยุดน้ำรั่ว':'จำลองน้ำรั่ว'}</button><label class="field">ระยะน้ำรั่ว <span><output id="o-leak-radius">${leakRadius(f).toFixed(1)} ม.</output></span><input type="range" id="p-leak-radius" min="${LEAK_RADIUS_MIN}" max="${LEAK_RADIUS_MAX}" step="0.1" value="${leakRadius(f)}"></label>`:'';
 const SMOKEABLE_FURNITURE=new Set(['kitchencounter','tv','fridge']);
@@ -1930,7 +1930,7 @@ function dev3D(d,sc,floorY=0){
         mp=[.04,-.08,0];break
       }
       if(d.type==='gas'){const active=gasSensorTriggered(host,d),body=mat(isSel?C.sun:'#F4F4F2',{roughness:.46,metalness:.12}),ledMat=mat(active?'#FF173C':'#37B979',{emissive:new THREE.Color(active?'#FF173C':'#167345'),emissiveIntensity:active?3:.35,roughness:.25});add(new THREE.CylinderGeometry(.11,.11,.045,32),body,0,0,0);add(new THREE.TorusGeometry(.075,.012,10,32),mat('#D9D9D5',{roughness:.42}),0,.024,0);const led=add(new THREE.SphereGeometry(.028,16,12),ledMat,.065,-.018,0);if(active){const glowMat=new THREE.MeshBasicMaterial({color:'#FF2448',transparent:true,opacity:.22,depthWrite:false}),glow=add(new THREE.SphereGeometry(.11,20,12),glowMat,.065,-.018,0);glow.renderOrder=2;const light=new THREE.PointLight(0xFF2448,0,1.6,2);light.position.set(.065,-.05,0);grp.add(light);T.pulse.push({m:ledMat,kind:'alarm',led,glow,glowMat,light});const alert=sprite('GAS ALARM','#FFFFFF','#FF334F',.29,true);alert.position.set(.05,-.24,0);grp.add(alert)}mp=[.05,-.08,0];break}
-      if(d.type==='flood'{
+      if(d.type==='flood'){
         const active=floodSensorTriggered(host,d),body=mat(isSel?C.sun:'#F4F4F2',{roughness:.48,metalness:.12}),ledMat=mat(active?'#FF173C':'#37B979',{emissive:new THREE.Color(active?'#FF173C':'#167345'),emissiveIntensity:active?2.8:.35,roughness:.25});
         add(new THREE.CylinderGeometry(.075,.075,.025,24),body,0,.014,0);
         const led=add(new THREE.SphereGeometry(.026,16,12),ledMat,.038,.035,0);
