@@ -1930,8 +1930,7 @@ function dev3D(d,sc,floorY=0){
         mp=[.04,-.08,0];break
       }
       if(d.type==='gas'){const active=gasSensorTriggered(host,d),body=mat(isSel?C.sun:'#F4F4F2',{roughness:.46,metalness:.12}),ledMat=mat(active?'#FF173C':'#37B979',{emissive:new THREE.Color(active?'#FF173C':'#167345'),emissiveIntensity:active?3:.35,roughness:.25});add(new THREE.CylinderGeometry(.11,.11,.045,32),body,0,0,0);add(new THREE.TorusGeometry(.075,.012,10,32),mat('#D9D9D5',{roughness:.42}),0,.024,0);const led=add(new THREE.SphereGeometry(.028,16,12),ledMat,.065,-.018,0);if(active){const glowMat=new THREE.MeshBasicMaterial({color:'#FF2448',transparent:true,opacity:.22,depthWrite:false}),glow=add(new THREE.SphereGeometry(.11,20,12),glowMat,.065,-.018,0);glow.renderOrder=2;const light=new THREE.PointLight(0xFF2448,0,1.6,2);light.position.set(.065,-.05,0);grp.add(light);T.pulse.push({m:ledMat,kind:'alarm',led,glow,glowMat,light});const alert=sprite('GAS ALARM','#FFFFFF','#FF334F',.29,true);alert.position.set(.05,-.24,0);grp.add(alert)}mp=[.05,-.08,0];break}
-      }
-      if(d.type==='flood'){
+      if(d.type==='flood'{
         const active=floodSensorTriggered(host,d),body=mat(isSel?C.sun:'#F4F4F2',{roughness:.48,metalness:.12}),ledMat=mat(active?'#FF173C':'#37B979',{emissive:new THREE.Color(active?'#FF173C':'#167345'),emissiveIntensity:active?2.8:.35,roughness:.25});
         add(new THREE.CylinderGeometry(.075,.075,.025,24),body,0,.014,0);
         const led=add(new THREE.SphereGeometry(.026,16,12),ledMat,.038,.035,0);
